@@ -1,12 +1,11 @@
 import express from "express";
+import { registerController } from "../../controllers/Auth/registerController.js";
 
 const router = express.Router();
 
-router.post("/register", (req, res) => {
-  res.send("Register route");
-});
+router.post("/register", registerController);
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   res.send("Login route");
 });
 
