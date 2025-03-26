@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config";
 import authRoutes from "./routes/authRoutes.js";
 import booksRoutes from "./routes/booksRoutes.js";
-import { connectToDB } from "../lib/dbConnection.js";
+import { connectToDB } from "./lib/dbConnection.js";
 
 const app = express();
 app.use(express.json());

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import cloudinary from "../../lib/cloudinary";
+import cloudinary from "../../lib/cloudinary.js";
 import Book from "../../models/Book.model.js";
 
 export const createBookController = async (req, res) => {
