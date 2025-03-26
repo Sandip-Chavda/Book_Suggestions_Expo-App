@@ -1,4 +1,5 @@
 import User from "../../models/User.model.js";
+import "dotenv/config";
 import jwt from "jsonwebtoken";
 
 const generateToken = (userId) => {
