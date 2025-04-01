@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -14,15 +15,22 @@ import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import COLORS from "@/constants/Colors";
+import { useAuthStore } from "@/store/authStore";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { isLoading, user, login } = useAuthStore();
 
   const handleLogin = async () => {
-    fetch("http://");
+    const result = await login(email, password);
+
+    if (!result.success) {
+      console.log(result);
+      return Alert.alert("Error", result.error);
+    }
   };
 
   return (
