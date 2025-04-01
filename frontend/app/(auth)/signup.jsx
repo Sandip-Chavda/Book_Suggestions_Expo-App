@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -11,8 +12,9 @@ import {
 } from "react-native";
 import styles from "@/styles/signup.styles";
 import { Ionicons } from "@expo/vector-icons";
-import COLORS from "@/constants/colors";
 import { useRouter } from "expo-router";
+import COLORS from "@/constants/Colors";
+import { useAuthStore } from "@/store/authStore";
 
 const SignUpScreen = () => {
   const router = useRouter();
@@ -21,9 +23,14 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignUp = async () => {};
+  const { user, isLoading, register } = useAuthStore();
+
+  const handleSignUp = async () => {
+    const result = await register(username, email, password);
+
+    if (!result.success) Alert.alert("Error", result.error);
+  };
 
   return (
     <KeyboardAvoidingView

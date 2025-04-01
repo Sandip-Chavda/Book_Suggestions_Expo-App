@@ -12,8 +12,8 @@ import {
 import styles from "@/styles/login.styles";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
-import COLORS from "@/constants/colors";
 import { Link } from "expo-router";
+import COLORS from "@/constants/Colors";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +21,9 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    fetch("http://");
+  };
 
   return (
     <KeyboardAvoidingView
