@@ -22,7 +22,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { isLoading, user, login } = useAuthStore();
+  const { isLoading, isCheckingAuth, login } = useAuthStore();
 
   const handleLogin = async () => {
     const result = await login(email, password);
@@ -33,6 +33,7 @@ const LoginScreen = () => {
     }
   };
 
+  if (isCheckingAuth) return null;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
