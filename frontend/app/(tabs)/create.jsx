@@ -18,6 +18,9 @@ import { Ionicons } from "@expo/vector-icons";
 import COLORS from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import { useAuthStore } from "@/store/authStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "@/constants/Api";
 
 const CreateScreen = () => {
   const [title, setTitle] = useState("");
@@ -26,6 +29,8 @@ const CreateScreen = () => {
   const [image, setImage] = useState(""); // for displaying selected image
   const [imageBase64, setImageBase64] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const { token } = useAuthStore();
 
   const router = useRouter();
 
@@ -74,7 +79,122 @@ const CreateScreen = () => {
     }
   };
 
-  const handleSubmit = async () => {};
+  // const handleSubmit = async () => {
+  //   if (!title || !caption || !imageBase64 || !rating) {
+  //     Alert.alert("Error", "Please fill in all fields.");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+
+  //     // const token = await AsyncStorage.getItem("token");
+  //     const uriParts = image.split(".");
+  //     const fileType = uriParts[uriParts.length - 1];
+  //     const imageType = fileType
+  //       ? `image/${fileType.toLowerCase()}`
+  //       : "image/jpeg";
+  //     const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+
+  //     const response = await fetch(`${API_URL}/books`, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         title,
+  //         caption,
+  //         rating: rating.toString(),
+  //         image: imageDataUrl,
+  //       }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (!response.ok) throw new Error(data.message || "Something wen wrong!");
+
+  //     Alert.alert("Success", "Your book recommendation has been posted");
+
+  //     setTitle("");
+  //     setCaption("");
+  //     setRating(3);
+  //     setImage(null);
+  //     setImageBase64(null);
+
+  //     router.push("/");
+  //   } catch (error) {
+  //     console.log("Error creating book post", error);
+  //     Alert.alert("Error", error.message || "Something went wrong!");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    if (!title || !caption || !imageBase64 || !rating) {
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Ensure the token is available from the store
+      if (!token) {
+        Alert.alert("Error", "You are not logged in.");
+        setLoading(false);
+        return;
+      }
+
+      // Extract file type and create image data URL
+      const uriParts = image.split(".");
+      const fileType = uriParts[uriParts.length - 1];
+      const imageType = fileType
+        ? `image/${fileType.toLowerCase()}`
+        : "image/jpeg";
+      const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+
+      // Make the API request
+      const response = await fetch(`${API_URL}/books`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // Use token from useAuthStore
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          caption,
+          rating: rating.toString(),
+          image: imageDataUrl,
+        }),
+      });
+
+      // Parse the response
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log("Response error:", data); // Log the error response for debugging
+        throw new Error(data.message || "Something went wrong!");
+      }
+
+      // Success alert and reset form
+      Alert.alert("Success", "Your book recommendation has been posted");
+      setTitle("");
+      setCaption("");
+      setRating(3);
+      setImage(null);
+      setImageBase64(null);
+
+      // Navigate to the home screen
+      router.push("/");
+    } catch (error) {
+      console.log("Error creating book post:", error.message); // Log the error for debugging
+      Alert.alert("Error", error.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const randerRatingPicker = () => {
     const stars = [];
