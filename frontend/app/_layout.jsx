@@ -12,7 +12,7 @@ export default function RootLayout() {
   const router = useRouter();
   const segments = useSegments();
 
-  const { checkAuth, user, token } = useAuthStore();
+  const { checkAuth, user, token, isCheckingAuth } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
     "JetBrainsMono-Medium": require("@/assets/fonts/JetBrainsMono-Medium.ttf"),
@@ -28,12 +28,14 @@ export default function RootLayout() {
 
   // hande navigation based on auth state
   useEffect(() => {
+    if (isCheckingAuth) return;
+
     const inAuthScreen = segments[0] === "(auth)";
     const isSignedIn = user && token;
 
     if (!isSignedIn && !inAuthScreen) router.replace("/(auth)");
     else if (isSignedIn && inAuthScreen) router.replace("/(tabs)");
-  }, [user, token, segments]);
+  }, [user, token, segments, isCheckingAuth]);
   return (
     <SafeAreaProvider>
       <SafeScreen>
