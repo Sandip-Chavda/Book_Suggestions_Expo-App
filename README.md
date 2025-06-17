@@ -6,7 +6,11 @@ A **full-stack Book Suggestions mobile application** made with **React Native (E
 
 ## 🎥 Demo
 
-This app lets **readers**:
+
+https://github.com/user-attachments/assets/3cb8c2b7-b231-43e3-a7f5-6d40a069eb81
+
+
+### This app lets **readers**:
 
 - Register or login
 - Share books they’ve finished reading, with photo, title, and description
